@@ -7,6 +7,7 @@ import HospitalsPage from './pages/HospitalsPage';
 import HospitalDetailPage from './pages/HospitalDetailPage';
 import DoctorsPage from './pages/DoctorsPage';
 import DoctorDetailPage from './pages/DoctorDetailPage';
+import EmergencyPage from './pages/EmergencyPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/hospitals/:id" element={<HospitalDetailPage />} />
             <Route path="/doctors" element={<DoctorsPage />} />
             <Route path="/doctors/:id" element={<DoctorDetailPage />} />
+            <Route path="/emergency" element={<EmergencyPage />} />
           </Routes>
         </main>
         <Footer />

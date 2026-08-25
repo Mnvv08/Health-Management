@@ -1,31 +1,37 @@
 import React from 'react';
 import { Building2, Stethoscope, CalendarCheck, PhoneCall } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Features = () => {
+  const navigate = useNavigate();
   const features = [
     {
       title: 'Find Nearby Hospitals',
       description: 'Locate top-rated hospitals near you instantly and get directions.',
       icon: <Building2 className="w-8 h-8 text-primary" />,
-      bgColor: 'bg-sky-50'
+      bgColor: 'bg-sky-50',
+      link: '/hospitals'
     },
     {
       title: 'Top Doctors',
       description: 'Browse verified and experienced doctors across various specialties.',
       icon: <Stethoscope className="w-8 h-8 text-secondary" />,
-      bgColor: 'bg-emerald-50'
+      bgColor: 'bg-emerald-50',
+      link: '/doctors'
     },
     {
       title: 'Book Appointments',
       description: 'Schedule your visits with ease and manage your bookings online.',
       icon: <CalendarCheck className="w-8 h-8 text-primary" />,
-      bgColor: 'bg-sky-50'
+      bgColor: 'bg-sky-50',
+      link: '/doctors'
     },
     {
       title: 'Emergency Help',
       description: 'Quick access to emergency contacts, ambulances, and urgent care.',
       icon: <PhoneCall className="w-8 h-8 text-secondary" />,
-      bgColor: 'bg-emerald-50'
+      bgColor: 'bg-emerald-50',
+      link: '/emergency'
     }
   ];
 
@@ -45,7 +51,8 @@ const Features = () => {
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="group p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default"
+              onClick={() => navigate(feature.link)}
+              className="group p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
             >
               <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-6 ${feature.bgColor} group-hover:scale-110 transition-transform duration-300`}>
                 {feature.icon}
