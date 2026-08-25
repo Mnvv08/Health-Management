@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Star, Clock, Building2, Stethoscope } from 'lucide-react';
 import { DUMMY_DOCTORS } from '../data/doctors';
 
@@ -12,6 +13,7 @@ const SPECIALITIES = [
 ];
 
 const DoctorsPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [specialityFilter, setSpecialityFilter] = useState('All');
   const [experienceFilter, setExperienceFilter] = useState('All');
@@ -154,7 +156,10 @@ const DoctorsPage = () => {
                 </div>
 
                 <div className="mt-auto pt-4 border-t border-slate-100">
-                  <button className="w-full py-2.5 rounded-xl bg-slate-50 text-slate-700 font-semibold hover:bg-primary hover:text-white transition-colors duration-200">
+                  <button 
+                    onClick={() => navigate(`/doctors/${doctor.id}`)}
+                    className="w-full py-2.5 rounded-xl bg-slate-50 text-slate-700 font-semibold hover:bg-primary hover:text-white transition-colors duration-200"
+                  >
                     View Profile
                   </button>
                 </div>

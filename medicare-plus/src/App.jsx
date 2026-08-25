@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import HospitalsPage from './pages/HospitalsPage';
 import HospitalDetailPage from './pages/HospitalDetailPage';
 import DoctorsPage from './pages/DoctorsPage';
+import DoctorDetailPage from './pages/DoctorDetailPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/hospitals" element={<HospitalsPage />} />
             <Route path="/hospitals/:id" element={<HospitalDetailPage />} />
             <Route path="/doctors" element={<DoctorsPage />} />
+            <Route path="/doctors/:id" element={<DoctorDetailPage />} />
           </Routes>
         </main>
         <Footer />
