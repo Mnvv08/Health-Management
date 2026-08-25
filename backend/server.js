@@ -4,6 +4,9 @@ const cors = require('cors');
 const connectDB = require('./src/config/db');
 const { errorHandler } = require('./src/middleware/errorHandler');
 
+const hospitalRoutes = require('./src/routes/hospitalRoutes');
+const doctorRoutes = require('./src/routes/doctorRoutes');
+
 // Load env vars
 dotenv.config();
 
@@ -17,6 +20,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use('/api/hospitals', hospitalRoutes);
+app.use('/api/doctors', doctorRoutes);
+
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
