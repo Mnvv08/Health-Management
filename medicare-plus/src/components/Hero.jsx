@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       {/* Background with soft gradient and SVG pattern */}
@@ -27,7 +30,10 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary hover:bg-sky-600 text-white font-semibold transition-all duration-300 transform hover:-translate-y-1 shadow-xl shadow-sky-200 flex items-center justify-center gap-2">
+            <button 
+              onClick={() => navigate('/hospitals')}
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-primary hover:bg-sky-600 text-white font-semibold transition-all duration-300 transform hover:-translate-y-1 shadow-xl shadow-sky-200 flex items-center justify-center gap-2"
+            >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
               Find Hospitals Nearby
             </button>
