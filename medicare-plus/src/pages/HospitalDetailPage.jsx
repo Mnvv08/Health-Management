@@ -30,7 +30,7 @@ const HospitalDetailPage = () => {
   }
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-20">
+    <div className="bg-slate-50 min-h-screen pb-20 animate-fade-in">
       {/* Hero Banner */}
       <div className="relative h-[40vh] min-h-[300px] md:h-[50vh] w-full">
         <img src={hospital.image} alt={hospital.name} className="w-full h-full object-cover" />

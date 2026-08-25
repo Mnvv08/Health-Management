@@ -94,7 +94,7 @@ const EmergencyPage = () => {
   };
 
   return (
-    <div className="pt-20 min-h-screen bg-slate-50 pb-16">
+    <div className="pt-20 min-h-screen bg-slate-50 pb-16 animate-fade-in">
       
       {/* Page Header */}
       <div className="bg-gradient-to-r from-rose-50 via-white to-red-50 py-12 border-b border-rose-200">

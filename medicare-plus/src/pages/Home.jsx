@@ -5,11 +5,11 @@ import Stats from '../components/Stats';
 
 const Home = () => {
   return (
-    <>
+    <div className="animate-fade-in">
       <Hero />
       <Features />
       <Stats />
-    </>
+    </div>
   );
 };
 

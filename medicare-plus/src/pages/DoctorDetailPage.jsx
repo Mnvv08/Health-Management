@@ -51,7 +51,7 @@ const DoctorDetailPage = () => {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-20 pt-20">
+    <div className="bg-slate-50 min-h-screen pb-20 pt-20 animate-fade-in">
       
       {/* Toast Notification */}
       {showToast && (
