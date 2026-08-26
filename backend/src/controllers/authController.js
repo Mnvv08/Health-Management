@@ -13,6 +13,8 @@ const generateToken = (id) => {
 // @access  Public
 const registerUser = async (req, res) => {
   try {
+    console.log('Register endpoint hit');
+    console.log('Body:', req.body);
     const { name, email, password, phone } = req.body;
     
     const userExists = await User.findOne({ email });
