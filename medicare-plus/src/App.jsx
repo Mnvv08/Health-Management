@@ -11,15 +11,24 @@ import DoctorDetailPage from './pages/DoctorDetailPage';
 import EmergencyPage from './pages/EmergencyPage';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-white flex flex-col">
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-white flex flex-col">
         <Navbar />
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path="/hospitals" element={<HospitalsPage />} />
             <Route path="/hospitals/:id" element={<HospitalDetailPage />} />
             <Route path="/doctors" element={<DoctorsPage />} />
@@ -33,6 +42,7 @@ function App() {
         <ScrollToTop />
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 

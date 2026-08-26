@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    setIsOpen(false);
+  };
 
   const getLinkClass = (path, isEmergency = false) => {
     const isActive = location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
@@ -28,6 +37,10 @@ const Navbar = () => {
     { name: 'Doctors', path: '/doctors' },
     { name: 'About', path: '/about' },
   ];
+  
+  if (isAuthenticated) {
+    navLinks.push({ name: 'Dashboard', path: '/dashboard' });
+  }
 
   return (
     <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
@@ -52,10 +65,33 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="hidden md:flex">
-            <button className="bg-primary hover:bg-sky-600 text-white px-6 py-2.5 rounded-full font-medium transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-sky-200">
-              Get Started
-            </button>
+          <div className="hidden md:flex items-center gap-4">
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <Link to="/dashboard" className="flex items-center gap-2 text-slate-700 hover:text-primary transition-colors font-medium">
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200">
+                    {user?.profilePhoto ? (
+                      <img src={user.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-5 h-5 text-slate-400" />
+                    )}
+                  </div>
+                  <span className="hidden lg:block">{user?.name?.split(' ')[0]}</span>
+                </Link>
+                <button onClick={handleLogout} className="text-sm font-bold text-slate-500 hover:text-rose-500 transition-colors">
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link to="/login" className="text-slate-600 hover:text-primary font-bold px-4 py-2 transition-colors">
+                  Login
+                </Link>
+                <Link to="/register" className="bg-primary hover:bg-sky-600 text-white px-6 py-2.5 rounded-full font-bold transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-sky-200">
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -92,10 +128,33 @@ const Navbar = () => {
           >
             Emergency
           </Link>
-          <div className="pt-4">
-            <button className="w-full bg-primary hover:bg-sky-600 text-white px-6 py-3 rounded-xl font-medium transition-colors">
-              Get Started
-            </button>
+          
+          <div className="pt-4 border-t border-slate-100 mt-2">
+            {isAuthenticated ? (
+              <button 
+                onClick={handleLogout}
+                className="w-full bg-slate-100 hover:bg-rose-50 text-rose-600 px-6 py-3 rounded-xl font-bold transition-colors text-center"
+              >
+                Logout
+              </button>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <Link 
+                  to="/login"
+                  onClick={() => setIsOpen(false)}
+                  className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-xl font-bold transition-colors text-center"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/register"
+                  onClick={() => setIsOpen(false)}
+                  className="w-full bg-primary hover:bg-sky-600 text-white px-6 py-3 rounded-xl font-bold transition-colors text-center shadow-md shadow-sky-200"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Star, Clock, Phone, Activity, Cross, Users } from 'lucide-react';
-import { DUMMY_HOSPITALS } from '../data/hospitals';
+import { getHospitalById } from '../api/hospitalService';
 
 const DUMMY_DOCTORS = [
   { id: 1, name: "Dr. Sarah Jenkins", speciality: "Cardiologist", exp: "15 years", img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300&h=300" },
@@ -19,12 +19,36 @@ const HospitalDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const hospital = DUMMY_HOSPITALS.find(h => h.id === parseInt(id));
+  const [hospital, setHospital] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  if (!hospital) {
+  useEffect(() => {
+    const fetchHospital = async () => {
+      try {
+        const data = await getHospitalById(id);
+        setHospital(data.hospital);
+      } catch (err) {
+        setError('Hospital not found');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchHospital();
+  }, [id]);
+
+  if (isLoading) {
     return (
       <div className="pt-24 min-h-screen flex items-center justify-center">
-        <h2 className="text-2xl font-bold">Hospital not found</h2>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error || !hospital) {
+    return (
+      <div className="pt-24 min-h-screen flex items-center justify-center">
+        <h2 className="text-2xl font-bold">{error || 'Hospital not found'}</h2>
       </div>
     );
   }

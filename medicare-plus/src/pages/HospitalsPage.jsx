@@ -1,32 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Star, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { DUMMY_HOSPITALS } from '../data/hospitals';
+import { getAllHospitals } from '../api/hospitalService';
 
 const HospitalsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [specialityFilter, setSpecialityFilter] = useState('All');
   const [ratingFilter, setRatingFilter] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
+  const [hospitals, setHospitals] = useState([]);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchHospitals = async () => {
+      try {
+        setIsLoading(true);
+        // We could pass search params here if backend supported all combinations perfectly,
+        // but since backend takes ?search, ?speciality, ?rating, we'll fetch based on them.
+        let params = {};
+        if (searchTerm) params.search = searchTerm;
+        if (specialityFilter !== 'All') params.speciality = specialityFilter;
+        if (ratingFilter !== 'All') {
+          if (ratingFilter === '4★ & above') params.rating = 4;
+          if (ratingFilter === '3★ & above') params.rating = 3;
+        }
 
-  const filteredHospitals = DUMMY_HOSPITALS.filter(hospital => {
-    const matchesSearch = hospital.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          hospital.location.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesSpeciality = specialityFilter === 'All' || hospital.speciality === specialityFilter;
-    
-    let matchesRating = true;
-    if (ratingFilter === '4★ & above') matchesRating = hospital.rating >= 4.0;
-    else if (ratingFilter === '3★ & above') matchesRating = hospital.rating >= 3.0;
+        const data = await getAllHospitals(params);
+        setHospitals(data.hospitals || []);
+      } catch (err) {
+        setError('Failed to fetch hospitals. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    return matchesSearch && matchesSpeciality && matchesRating;
-  });
+    fetchHospitals();
+  }, [searchTerm, specialityFilter, ratingFilter]);
+
+  // filteredHospitals is just hospitals now, as backend filters them.
+  const filteredHospitals = hospitals;
 
   return (
     <div className="pt-20 min-h-screen bg-slate-50 pb-16 animate-fade-in">

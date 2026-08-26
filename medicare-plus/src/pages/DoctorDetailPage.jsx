@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Star, Clock, Phone, Calendar, MessageCircle, CheckCircle2 } from 'lucide-react';
-import { DUMMY_DOCTORS } from '../data/doctors';
+import { useAuth } from '../context/AuthContext';
+import { getDoctorById } from '../api/doctorService';
+import { getBookedSlots, bookAppointment } from '../api/appointmentService';
 
-const timeSlots = [
-  { time: '10:00 AM', available: true },
-  { time: '11:00 AM', available: false },
-  { time: '12:00 PM', available: true },
-  { time: '02:00 PM', available: true },
-  { time: '03:00 PM', available: false },
-  { time: '04:00 PM', available: true },
+const ALL_TIME_SLOTS = [
+  '10:00 AM',
+  '11:00 AM',
+  '12:00 PM',
+  '02:00 PM',
+  '03:00 PM',
+  '04:00 PM',
 ];
 
 const next7Days = Array.from({ length: 7 }).map((_, i) => {
@@ -30,24 +32,101 @@ const DUMMY_REVIEWS = [
 const DoctorDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const doctor = DUMMY_DOCTORS.find(d => d.id === parseInt(id));
+  const { isAuthenticated } = useAuth();
+  
+  const [doctor, setDoctor] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const [selectedDate, setSelectedDate] = useState(next7Days[0].dateStr);
   const [selectedTime, setSelectedTime] = useState('');
+  const [bookedSlots, setBookedSlots] = useState([]);
+  
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState('success');
+  const [isBooking, setIsBooking] = useState(false);
 
-  if (!doctor) {
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const data = await getDoctorById(id);
+        setDoctor(data.doctor);
+      } catch (err) {
+        setError('Doctor not found');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDoctor();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchSlots = async () => {
+      try {
+        const data = await getBookedSlots(id, selectedDate);
+        setBookedSlots(data.bookedSlots || []);
+      } catch (err) {
+        console.error('Failed to fetch slots', err);
+        setBookedSlots([]);
+      }
+    };
+    if (id && selectedDate) {
+      fetchSlots();
+    }
+  }, [id, selectedDate]);
+
+  if (isLoading) {
     return (
       <div className="pt-24 min-h-screen flex items-center justify-center">
-        <h2 className="text-2xl font-bold">Doctor not found</h2>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
 
-  const handleBookAppointment = () => {
+  if (error || !doctor) {
+    return (
+      <div className="pt-24 min-h-screen flex items-center justify-center">
+        <h2 className="text-2xl font-bold">{error || 'Doctor not found'}</h2>
+      </div>
+    );
+  }
+
+  const handleBookAppointment = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    
     if (!selectedTime) return;
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    
+    setIsBooking(true);
+    try {
+      await bookAppointment({
+        doctorId: doctor._id,
+        hospitalId: doctor.hospital,
+        date: selectedDate,
+        timeSlot: selectedTime,
+      });
+      
+      setToastType('success');
+      setToastMessage('Appointment Confirmed!');
+      setShowToast(true);
+      
+      // Refresh booked slots
+      const data = await getBookedSlots(id, selectedDate);
+      setBookedSlots(data.bookedSlots || []);
+      setSelectedTime('');
+      
+      setTimeout(() => setShowToast(false), 4000);
+    } catch (err) {
+      setToastType('error');
+      setToastMessage(err.response?.data?.message || 'Failed to book appointment');
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   return (
@@ -55,11 +134,13 @@ const DoctorDetailPage = () => {
       
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed top-24 right-4 md:right-8 bg-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 z-50 animate-bounce">
+        <div className={`fixed top-24 right-4 md:right-8 ${toastType === 'success' ? 'bg-emerald-500' : 'bg-rose-500'} text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 z-50 animate-bounce`}>
           <CheckCircle2 className="w-6 h-6" />
           <div>
-            <p className="font-bold">Appointment Confirmed!</p>
-            <p className="text-sm text-emerald-50">Dr. {doctor.name.replace('Dr. ', '')} on {selectedDate} at {selectedTime}</p>
+            <p className="font-bold">{toastMessage}</p>
+            {toastType === 'success' && (
+              <p className="text-sm text-emerald-50">Dr. {doctor.name.replace('Dr. ', '')} on {selectedDate} at {selectedTime}</p>
+            )}
           </div>
         </div>
       )}
@@ -107,7 +188,7 @@ const DoctorDetailPage = () => {
             <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[250px] bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
               <div className="text-center md:text-right mb-2">
                 <p className="text-slate-500 text-sm font-medium mb-1">Consultation Fee</p>
-                <p className="text-3xl font-extrabold text-slate-900">₹500</p>
+                <p className="text-3xl font-extrabold text-slate-900">₹{doctor.consultationFee || 500}</p>
               </div>
               <button 
                 onClick={() => {
@@ -217,29 +298,32 @@ const DoctorDetailPage = () => {
             <div className="mb-8">
               <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Step 2 — Select Time Slot</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {timeSlots.map((slot) => (
-                  <button
-                    key={slot.time}
-                    disabled={!slot.available}
-                    onClick={() => setSelectedTime(slot.time)}
-                    className={`py-3 px-4 rounded-xl font-bold transition-all border ${
-                      !slot.available 
-                        ? 'bg-slate-50 border-slate-100 text-slate-400 cursor-not-allowed opacity-70 line-through' 
-                        : selectedTime === slot.time 
-                          ? 'bg-secondary text-white border-secondary shadow-md transform -translate-y-0.5' 
-                          : 'bg-white text-slate-700 border-slate-200 hover:border-secondary hover:bg-emerald-50'
-                    }`}
-                  >
-                    {slot.time}
-                  </button>
-                ))}
+                {ALL_TIME_SLOTS.map((time) => {
+                  const isAvailable = !bookedSlots.includes(time);
+                  return (
+                    <button
+                      key={time}
+                      disabled={!isAvailable}
+                      onClick={() => setSelectedTime(time)}
+                      className={`py-3 px-4 rounded-xl font-bold transition-all border ${
+                        !isAvailable 
+                          ? 'bg-slate-50 border-slate-100 text-slate-400 cursor-not-allowed opacity-70 line-through' 
+                          : selectedTime === time 
+                            ? 'bg-secondary text-white border-secondary shadow-md transform -translate-y-0.5' 
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-secondary hover:bg-emerald-50'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             <div>
               <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Step 3 — Confirm</h3>
               <button
-                disabled={!selectedTime}
+                disabled={!selectedTime || isBooking}
                 onClick={handleBookAppointment}
                 className={`w-full py-4 rounded-xl font-extrabold text-lg transition-all ${
                   selectedTime 
@@ -247,7 +331,7 @@ const DoctorDetailPage = () => {
                     : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                 }`}
               >
-                {selectedTime ? 'Confirm Appointment' : 'Select a Time Slot'}
+                {isBooking ? 'Booking...' : selectedTime ? 'Confirm Appointment' : 'Select a Time Slot'}
               </button>
             </div>
           </section>

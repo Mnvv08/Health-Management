@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Star, Clock, Building2, Stethoscope } from 'lucide-react';
-import { DUMMY_DOCTORS } from '../data/doctors';
+import { getAllDoctors } from '../api/doctorService';
 
 const SPECIALITIES = [
   { name: 'Cardiologist', icon: '🫀' },
@@ -13,33 +13,55 @@ const SPECIALITIES = [
 ];
 
 const DoctorsPage = () => {
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [specialityFilter, setSpecialityFilter] = useState('All');
   const [experienceFilter, setExperienceFilter] = useState('All');
   const [availabilityFilter, setAvailabilityFilter] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
+  const [doctors, setDoctors] = useState([]);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchDoctors = async () => {
+      try {
+        setIsLoading(true);
+        let params = {};
+        if (searchTerm) params.search = searchTerm;
+        if (specialityFilter !== 'All') params.speciality = specialityFilter;
+        
+        const data = await getAllDoctors(params);
+        let results = data.doctors || [];
 
-  const filteredDoctors = DUMMY_DOCTORS.filter(doctor => {
-    const matchesSearch = doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesSpeciality = specialityFilter === 'All' || doctor.speciality === specialityFilter;
-    
-    let matchesExperience = true;
-    if (experienceFilter === '0-5 years') matchesExperience = doctor.experience <= 5;
-    else if (experienceFilter === '5-10 years') matchesExperience = doctor.experience > 5 && doctor.experience <= 10;
-    else if (experienceFilter === '10+ years') matchesExperience = doctor.experience > 10;
+        if (experienceFilter !== 'All') {
+          results = results.filter(doc => {
+            const exp = parseInt(doc.experience);
+            if (experienceFilter === '0-5 years') return exp <= 5;
+            if (experienceFilter === '5-10 years') return exp > 5 && exp <= 10;
+            if (experienceFilter === '10+ years') return exp > 10;
+            return true;
+          });
+        }
+        
+        if (availabilityFilter !== 'All') {
+          results = results.filter(doc => {
+            if (availabilityFilter === 'Available Today') return doc.availableToday;
+            return true;
+          });
+        }
 
-    const matchesAvailability = availabilityFilter === 'All' || doctor.availability === availabilityFilter;
+        setDoctors(results);
+      } catch (err) {
+        setError('Failed to fetch doctors. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    return matchesSearch && matchesSpeciality && matchesExperience && matchesAvailability;
-  });
+    fetchDoctors();
+  }, [searchTerm, specialityFilter, experienceFilter, availabilityFilter]);
+
+  const filteredDoctors = doctors;
 
   return (
     <div className="pt-20 min-h-screen bg-slate-50 pb-16 animate-fade-in">
