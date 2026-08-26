@@ -1,5 +1,5 @@
 import React from 'react';
-import { Twitter, Instagram, Activity } from 'lucide-react';
+import { MessageSquare, Camera, Activity } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -33,11 +33,11 @@ const Footer = () => {
           <div className="flex flex-col md:items-end">
             <h3 className="text-lg font-semibold mb-4 text-white">Connect With Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all duration-300">
-                <Twitter className="w-5 h-5" />
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
+                <MessageSquare className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all duration-300">
-                <Instagram className="w-5 h-5" />
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
+                <Camera className="w-5 h-5" />
               </a>
               <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
                 <Activity className="w-5 h-5" />

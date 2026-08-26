@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Search, HandHeart, CalendarCheck, Linkedin, Twitter, Mail, Phone, CheckCircle } from 'lucide-react';
+import { CheckCircle2, Search, HandHeart, CalendarCheck, Briefcase, MessageSquare, Mail, Phone, CheckCircle } from 'lucide-react';
 
 const TEAM = [
   {
@@ -130,10 +130,10 @@ const AboutPage = () => {
                 <p className="text-slate-600 text-sm mb-6">{member.bio}</p>
                 <div className="flex items-center justify-center gap-4">
                   <a href="#" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-[#0A66C2] hover:text-white transition-colors">
-                    <Linkedin className="w-4 h-4" />
+                    <Briefcase className="w-4 h-4" />
                   </a>
                   <a href="#" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-[#1DA1F2] hover:text-white transition-colors">
-                    <Twitter className="w-4 h-4" />
+                    <MessageSquare className="w-4 h-4" />
                   </a>
                 </div>
               </div>
