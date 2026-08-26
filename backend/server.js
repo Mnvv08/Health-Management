@@ -18,15 +18,17 @@ connectDB();
 const app = express();
 
 // Middleware
-const allowedOrigins = process.env.NODE_ENV === "production"
-  ? [process.env.FRONTEND_URL]
-  : ["http://localhost:5173", "http://localhost:5174"];
-
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    const allowedOrigins = process.env.NODE_ENV === "production"
+      ? [process.env.FRONTEND_URL, process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null]
+      : ["http://localhost:5173", "http://localhost:5174"];
+      
+    // Allow if no origin (tools like curl), or if FRONTEND_URL is missing, or if origin matches
+    if (!origin || !process.env.FRONTEND_URL || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error(`CORS blocked origin: ${origin}. Expected: ${process.env.FRONTEND_URL}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
