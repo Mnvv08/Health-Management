@@ -20,15 +20,11 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: function (origin, callback) {
-    const allowedOrigins = process.env.NODE_ENV === "production"
-      ? [process.env.FRONTEND_URL, process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null]
-      : ["http://localhost:5173", "http://localhost:5174"];
-      
-    // Allow if no origin (tools like curl), or if FRONTEND_URL is missing, or if origin matches
-    if (!origin || !process.env.FRONTEND_URL || allowedOrigins.includes(origin)) {
+    // Allow any origin from vercel, localhost, or if no origin (tools like curl)
+    if (!origin || origin.includes('vercel.app') || origin.includes('localhost') || origin === process.env.FRONTEND_URL) {
       callback(null, true);
     } else {
-      console.error(`CORS blocked origin: ${origin}. Expected: ${process.env.FRONTEND_URL}`);
+      console.error(`CORS blocked origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
