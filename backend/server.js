@@ -7,6 +7,7 @@ const { errorHandler } = require('./src/middleware/errorHandler');
 const hospitalRoutes = require('./src/routes/hospitalRoutes');
 const doctorRoutes = require('./src/routes/doctorRoutes');
 const authRoutes = require('./src/routes/authRoutes');
+const appointmentRoutes = require('./src/routes/appointmentRoutes');
 
 // Load env vars
 dotenv.config();
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/appointments', appointmentRoutes);
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({
