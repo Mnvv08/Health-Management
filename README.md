@@ -1,86 +1,134 @@
-# 🏥 MediCare+
+<div align="center">
+  <h1>🏥 MediCare+</h1>
+  <p><strong>Your Complete Digital Healthcare Companion</strong></p>
 
-A modern, responsive Health Management Web Application for discovering hospitals, browsing doctor directories, and seamlessly booking medical appointments.
+  <!-- Badges -->
+  <a href="https://health-management-ecru.vercel.app">
+    <img src="https://img.shields.io/badge/Live_Demo-00E5FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+  </a>
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+  <img src="https://img.shields.io/badge/Deployed_on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render" />
+</div>
 
-MediCare+ bridges the gap between patients and healthcare providers. It provides an intuitive interface for users to find the right medical care, check doctor availability in real-time, and securely manage their health appointments from a personalized dashboard.
+<br />
+
+## 📖 Table of Contents
+- [About the Project](#-about-the-project)
+- [Live Demo](#-live-demo)
+- [Screenshots](#-screenshots)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [API Endpoints](#-api-endpoints)
+- [Deployment](#-deployment)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Author](#-author)
+
+---
+
+## ℹ️ About the Project
+MediCare+ is a full-stack, modern health management web application designed to bridge the gap between patients and healthcare providers. It provides a seamless interface for discovering top-rated hospitals, browsing specialized doctors, checking real-time availability, and securely booking appointments, all from one unified dashboard.
+
+## 🚀 Live Demo
+**URL:** [https://health-management-ecru.vercel.app](https://health-management-ecru.vercel.app)
+
+> **⚠️ Note on Performance:** The backend API is hosted on Render's free tier. If the service has been inactive, **the first request (like logging in or loading data) may take 30-60 seconds** as the server wakes up from sleep. Subsequent requests will be lightning fast!
+
+## 📸 Screenshots
+
+<!-- Add screenshots here -->
+![Landing Page](placeholder-image-url-1)
+*Landing Page with Hero Section*
+
+![Hospital Directory](placeholder-image-url-2)
+*Nearby Hospitals Listing*
+
+![Doctor Booking](placeholder-image-url-3)
+*Doctor Appointment Booking UI*
 
 ## ✨ Features
+* 🎨 **Beautiful UI:** Stunning landing page with a modern hero section.
+* 🏥 **Hospital Directory:** Discover nearby hospitals, filter by services, and read detailed facility reviews.
+* 👨‍⚕️ **Doctor Search:** Browse doctors with intelligent specialty filters.
+* 📅 **Appointment Management:** Real-time appointment booking interface with double-booking prevention.
+* 🚑 **Emergency Services:** Dedicated SOS page, first aid guides, and instant emergency contacts.
+* ℹ️ **About Page:** Project mission and team information.
+* 🔒 **Secure Authentication:** Robust JWT-based Register and Login system.
+* 📊 **User Dashboard:** Personalized hub to view, manage, and cancel active appointments.
+* 📱 **Fully Responsive:** Flawless experience across desktop, tablet, and mobile devices.
 
-* **User Authentication:** Secure JWT-based registration and login system with encrypted passwords.
-* **Hospital Discovery:** Browse a comprehensive directory of hospitals, view details, and filter by services.
-* **Doctor Directory:** Search for doctors, view their profiles, specialties, and real-time availability.
-* **Appointment Booking:** Real-time appointment scheduling system with double-booking prevention.
-* **User Dashboard:** A personalized space to manage profile details, view upcoming appointments, and securely cancel bookings.
-* **Emergency Services:** Quick access portal for emergency hotlines, ambulance services, and immediate care guidelines.
+## 💻 Tech Stack
 
-## 🖥️ Screenshots / Preview
-
-<!-- Add application screenshots here -->
-*(Screenshots of the Dashboard, Hospital Directory, and Appointment Booking flow will be added here)*
-
-## 🛠️ Tech Stack
-
-### Frontend
-* **Framework:** React 19 (via Vite)
-* **Styling:** Tailwind CSS v4
-* **Icons:** Lucide React
-* **Routing:** React Router DOM v7
-* **HTTP Client:** Axios
-
-### Backend
-* **Runtime:** Node.js
-* **Framework:** Express.js
-* **Database:** MongoDB
-* **ODM:** Mongoose v9
-* **Authentication:** JSON Web Tokens (JWT) & bcryptjs
-* **Middleware:** CORS, custom error handlers
+| Category | Technologies |
+| :--- | :--- |
+| **Frontend** | React, Vite, Tailwind CSS, React Router DOM, Axios, Lucide React |
+| **Backend** | Node.js, Express.js, JWT, bcryptjs, CORS |
+| **Database** | MongoDB Atlas, Mongoose |
+| **Deployment** | Vercel (Frontend), Render (Backend) |
 
 ## 📂 Project Structure
 
 ```text
 Health-Management/
-├── backend/                  # Express server & API
+├── backend/                  # Node.js + Express backend
 │   ├── src/
-│   │   ├── config/           # Database configuration
-│   │   ├── controllers/      # Request handlers (auth, hospitals, doctors, appointments)
-│   │   ├── middleware/       # JWT protection & error handling
+│   │   ├── config/           # DB connection
+│   │   ├── controllers/      # Route logic
+│   │   ├── middleware/       # JWT Auth & Error handling
 │   │   ├── models/           # Mongoose schemas
-│   │   └── routes/           # API route definitions
-│   ├── server.js             # Express application entry point
+│   │   └── routes/           # Express routers
+│   ├── server.js             # Entry point
 │   └── package.json
 │
-├── medicare-plus/            # React frontend application
+├── medicare-plus/            # React + Vite frontend
 │   ├── src/
-│   │   ├── api/              # Axios instance and API services
-│   │   ├── components/       # Reusable UI components
-│   │   ├── context/          # React Context (AuthContext)
-│   │   ├── pages/            # Page components (Home, Dashboard, Doctors, etc.)
-│   │   ├── App.jsx           # Main application router
-│   │   └── main.jsx          # React DOM rendering
-│   ├── tailwind.config.js    # Tailwind styling configuration
+│   │   ├── api/              # Axios services
+│   │   ├── components/       # Reusable UI elements
+│   │   ├── context/          # React context providers
+│   │   ├── pages/            # View components
+│   │   ├── App.jsx           # Main router
+│   │   └── main.jsx          # React DOM render
+│   ├── tailwind.config.js    # Tailwind setup
 │   └── package.json
 │
 └── README.md
 ```
 
-## ⚙️ Installation & Setup
+## 🛠️ Getting Started
 
-Follow these steps to run the project locally.
+Follow these instructions to run the project locally.
 
-### 1. Clone the repository
+### Prerequisites
+* Node.js (v16 or higher)
+* MongoDB Database (Local or Atlas)
+* Git
+
+### 1. Clone the repo
 ```bash
 git clone https://github.com/Mnvv08/Health-Management.git
 cd Health-Management
 ```
 
 ### 2. Backend Setup
-Navigate to the backend directory and install dependencies:
+Navigate into the backend and install dependencies:
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in the `backend` directory (see Environment Variables below).
+Create a `.env` file in the `/backend` directory:
+```env
+PORT=5001
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_super_secret_jwt_key
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
+```
 
 Start the backend development server:
 ```bash
@@ -94,112 +142,56 @@ cd medicare-plus
 npm install
 ```
 
-Create a `.env` file in the `medicare-plus` directory.
+Create a `.env` file in the `/medicare-plus` directory:
+```env
+VITE_API_URL=http://localhost:5001/api
+```
 
 Start the frontend development server:
 ```bash
 npm run dev
 ```
+The app will be running at `http://localhost:5173`.
 
-## 🔐 Environment Variables
+## 🔌 API Endpoints
 
-You need to configure the following environment variables. Do not commit these files to version control.
+The RESTful API provides the following endpoints:
 
-**`backend/.env`**
-```env
-PORT=5001
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secure_jwt_secret_key
-NODE_ENV=development
-FRONTEND_URL=http://localhost:5173
-```
-
-**`medicare-plus/.env`**
-```env
-VITE_API_URL=http://localhost:5001/api
-```
-
-## 🚀 Running the Application
-
-Once both servers are running:
-* **Frontend:** Open your browser and navigate to `http://localhost:5173`
-* **Backend API:** The API will be available at `http://localhost:5001/api`
-
-## 🔌 API / Backend
-
-The RESTful API provides the following major endpoints:
-
-### Authentication
-* `POST /api/auth/register` - Create a new user account
-* `POST /api/auth/login` - Authenticate a user and return a JWT
-* `GET /api/auth/me` - Get current authenticated user profile
-
-### Hospitals
-* `GET /api/hospitals` - Retrieve all hospitals
-* `GET /api/hospitals/:id` - Get specific hospital details
-* `POST /api/hospitals` - Add a new hospital (Admin)
-
-### Doctors
-* `GET /api/doctors` - Retrieve all doctors
-* `GET /api/doctors/:id` - Get specific doctor details
-* `POST /api/doctors` - Add a new doctor profile (Admin)
-
-### Appointments
-* `POST /api/appointments` - Book a new appointment
-* `GET /api/appointments/slots` - Get booked slots for a specific doctor & date
-* `GET /api/appointments/my` - Retrieve all appointments for the logged-in user
-* `GET /api/appointments/:id` - Get specific appointment details
-* `PUT /api/appointments/:id/cancel` - Cancel an existing appointment
-
-## 🗄️ Database
-
-This project uses **MongoDB** as its primary database, interacting through the Mongoose ODM.
-Core collections include:
-* **Users:** Stores authentication credentials, profile data, and roles.
-* **Hospitals:** Stores hospital details, locations, and available facilities.
-* **Doctors:** Stores physician profiles, specialties, and affiliations.
-* **Appointments:** Links users with doctors for specific time slots, managing booking states.
-
-## 🔒 Authentication & Security
-
-* **JWT Authentication:** Stateful sessions are avoided. A JSON Web Token is issued on login and must be attached as a `Bearer` token in the `Authorization` header for protected routes.
-* **Password Hashing:** Passwords are cryptographically hashed using `bcryptjs` via Mongoose pre-save hooks before entering the database.
-* **Protected Routes:** Both the React frontend (via AuthContext) and Express backend (via custom middleware) strictly protect sensitive routes from unauthenticated access.
+| Route | Method | Endpoint | Description |
+| :--- | :---: | :--- | :--- |
+| **Auth** | `POST` | `/api/auth/register` | Register a new user |
+| **Auth** | `POST` | `/api/auth/login` | Authenticate user & get token |
+| **Auth** | `GET` | `/api/auth/me` | Get current logged-in user |
+| **Hospitals** | `GET` | `/api/hospitals` | Get all hospitals |
+| **Hospitals** | `GET` | `/api/hospitals/:id`| Get specific hospital details |
+| **Doctors** | `GET` | `/api/doctors` | Get all doctors |
+| **Doctors** | `GET` | `/api/doctors/:id` | Get specific doctor details |
+| **Appointments**| `POST` | `/api/appointments` | Book a new appointment |
+| **Appointments**| `GET` | `/api/appointments/slots` | Get booked slots for a doctor |
+| **Appointments**| `GET` | `/api/appointments/my` | Get all appointments for user |
+| **Appointments**| `PUT` | `/api/appointments/:id/cancel`| Cancel an appointment |
 
 ## 🌍 Deployment
 
-The application is architected for modern cloud deployment:
-* **Frontend:** Optimized for Vercel. Ensure `VITE_API_URL` is set in the Vercel dashboard.
-* **Backend:** Configured for Render. Ensure all secrets are added to the Render environment and `NODE_ENV` is set to `production`.
-
-## 🧪 Testing
-
-Testing infrastructure is not currently included in this version.
-
-## 🔮 Future Improvements
-
-* Telemedicine video consultations integration
-* Patient reviews and 5-star rating system for doctors
-* Electronic Health Records (EHR) document upload
-* Real-time push notifications for appointment reminders
-* Interactive map integration for nearby hospital discovery
+* **Frontend (Vercel):** The frontend is seamlessly deployed using Vercel. Ensure `VITE_API_URL` is set in the Vercel project environment variables pointing to the Render backend URL.
+* **Backend (Render):** Deployed as a Node Web Service on Render. Environment variables (MONGO, JWT, FRONTEND_URL) are configured within the Render dashboard.
+* **Database (MongoDB Atlas):** Hosted securely on the cloud. The Render instance's IP configuration is managed in Atlas network access.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow this workflow:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -m 'Add amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
+Contributions are always welcome!
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-Licensing has not yet been specified for this project.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 👨‍💻 Author
 
-**Mnvv08**  
-*(Sourced from repository git history)*
+**Manav**
+* **GitHub:** [@Mnvv08](https://github.com/Mnvv08)
+* **Project Link:** [https://github.com/Mnvv08/Health-Management](https://github.com/Mnvv08/Health-Management)
