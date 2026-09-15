@@ -41,8 +41,23 @@ const appointmentSchema = new mongoose.Schema(
       default: 'unpaid',
       enum: ['unpaid', 'paid'],
     },
+        cancelledAt: Date,
+    cancelledBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true }
 );
+
+appointmentSchema.index(
+  { doctor: 1, date: 1, timeSlot: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { status: { $in: ['pending', 'confirmed'] } },
+  }
+);
+
+appointmentSchema.index({ user: 1, date: -1 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);
