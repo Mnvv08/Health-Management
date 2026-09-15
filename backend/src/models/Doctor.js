@@ -42,4 +42,7 @@ const doctorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+doctorSchema.index({ speciality: 1, rating: -1 });
+doctorSchema.index({ hospital: 1 });
+
 module.exports = mongoose.model('Doctor', doctorSchema);
